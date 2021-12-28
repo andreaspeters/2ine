@@ -393,6 +393,7 @@ LX_NATIVE_MODULE_INIT({ if (!init16_doscalls()) return 0; })
     LX_NATIVE_EXPORT(DosGetDateTime, 230),
     LX_NATIVE_EXPORT(DosDevConfig, 231),
     LX_NATIVE_EXPORT(DosExit, 234),
+    LX_NATIVE_EXPORT(DosSetPriority, 236),
     LX_NATIVE_EXPORT(DosResetBuffer, 254),
     LX_NATIVE_EXPORT(DosSetCurrentDir, 255),
     LX_NATIVE_EXPORT(DosSetFilePtr, 256),

@@ -166,6 +166,11 @@ static void initHFileInfoFromUnixFd(const int fd, HFileInfo *info)
     } // else
 } // initHFileInfoFromUnixFd
 
+APIRET DosSetPriority(ULONG ulScope, ULONG ulClass, LONG lDelta, ULONG ulID)
+{
+    TRACE_NATIVE("DosSetPriority(%d, %d, %d, %d)", ulScope, ulClass, lDelta, ulID);
+    return 0;
+} // DosSetPriority
 
 APIRET DosGetInfoBlocks(PTIB *pptib, PPIB *pppib)
 {
