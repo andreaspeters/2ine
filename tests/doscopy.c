@@ -5,24 +5,13 @@
  #include <string.h>
 
 int main(VOID) {
-   UCHAR   achSourceString[80]  = "config.sys"; /* String to transform */
+   UCHAR   achSourceString[80]  = "doscopy.c"; /* String to transform */
    UCHAR   achEditString[80]    = "*.cpy";      /* Editing string */
    UCHAR   achTargetString[200] = "";           /* Destination string buffer */
    APIRET  rc                   = NO_ERROR;     /* Return code */
 
-   rc = DosSetDefaultDisk(3);    /* Set drive to C: (1=A, 2=B, 3=C, ...)      */
-   if (rc != NO_ERROR) {
-      printf("DosSetDefaultDisk error: return code = %u\n", rc);
-      return 1;
-   }
 
-   rc = DosSetCurrentDir ("\\");  /*  Set directory to root */
-   if (rc != NO_ERROR) {
-      printf("DosSetCurrentDir error: return code = %u\n", rc);
-      return 1;
-   }
-
-           /* Transform "CONFIG.SYS" using "*.CPY" to "CONFIG.CPY" */
+  /* Transform "CONFIG.SYS" using "*.CPY" to "CONFIG.CPY" */
 
    rc = DosEditName(1, achSourceString, achEditString, achTargetString, 200);
 
