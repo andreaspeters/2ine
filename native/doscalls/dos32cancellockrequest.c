@@ -16,7 +16,7 @@
 
 #include "doscalls-lx.h"
 
-APIRET APIENTRY DosCancelLockRequest(HFILE hFile, PFILELOCK pflLock)
+APIRET APIENTRY Dos32CancelLockRequest(HFILE hFile, PFILELOCK pflLock)
 {
   FILELOCKL flLockL;
   APIRET rc;
@@ -32,7 +32,7 @@ APIRET APIENTRY DosCancelLockRequest(HFILE hFile, PFILELOCK pflLock)
   flLockL.lOffset=pflLock->lOffset;
   flLockL.lRange=pflLock->lRange;
 
-  rc = DosCancelLockRequestL(hFile,
+  rc = Dos32CancelLockRequestL(hFile,
                              &flLockL);
   TRACE_NATIVE("flLock=%lx\n", *pflLock);
   TRACE_NATIVE("%s exit => %lx\n", __FUNCTION__, rc);
