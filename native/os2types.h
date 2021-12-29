@@ -95,6 +95,20 @@ typedef int (APIENTRY *PFN)(void);
 
 typedef ULONG ERRORID;
 
+typedef struct _FILELOCK {
+  LONG lOffset;
+  LONG lRange;
+} FILELOCK;
+typedef FILELOCK * PFILELOCK;
+
+typedef struct _FILELOCKL {
+  LONGLONG lOffset;
+  LONGLONG lRange;
+} FILELOCKL;
+typedef FILELOCKL * PFILELOCKL;
+
+
+
 #define NULLHANDLE 0
 #define TRUE 1
 #define FALSE 0

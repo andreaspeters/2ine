@@ -14,9 +14,8 @@
    @todo Add support of EAs
 
 */
-
+#include "../os2native16.h"
 #include "doscalls.h"
-#include "../os2errors.h"
 
 #include <unistd.h>
 #include <limits.h>
@@ -32,10 +31,6 @@
 #include <sys/stat.h>
 
 #include "doscalls-lx.h"
-
-
-#include <string.h>
-#include <sys/stat.h>
 
 // Safe functions
 

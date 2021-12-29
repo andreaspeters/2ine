@@ -27,18 +27,6 @@ extern "C" {
 #define CCHMAXPATH 260
 #define CCHMAXPATHCOMP 256
 
-typedef struct _FILELOCK {
-  LONG lOffset;
-  LONG lRange;
-} FILELOCK;
-typedef FILELOCK * PFILELOCK;
-
-typedef struct _FILELOCKL {
-  LONGLONG lOffset;
-  LONGLONG lRange;
-} FILELOCKL;
-typedef FILELOCKL * PFILELOCKL;
-
 enum
 {
     EXIT_THREAD,

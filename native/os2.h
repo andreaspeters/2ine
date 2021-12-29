@@ -16,7 +16,7 @@
 
 #include "os2types.h"
 #include "os2errors.h"
-#include "doscalls.h"
+#include "doscalls/doscalls.h"
 #include "kbdcalls.h"
 #include "viocalls.h"
 #include "quecalls.h"

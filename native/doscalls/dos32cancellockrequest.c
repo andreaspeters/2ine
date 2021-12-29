@@ -1,5 +1,5 @@
+#include "../os2native16.h"
 #include "doscalls.h"
-#include "../os2errors.h"
 
 #include <unistd.h>
 #include <limits.h>

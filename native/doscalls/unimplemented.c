@@ -16,6 +16,7 @@
 #include "doscalls-lx.h"
 
 
+
 APIRET DosSetPriority(ULONG ulScope, ULONG ulClass, LONG lDelta, ULONG ulID)
 {
     TRACE_NATIVE("Unimplemented DosSetPriority(%d, %d, %d, %d)", ulScope, ulClass, lDelta, ulID);
