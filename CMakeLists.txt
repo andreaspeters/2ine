@@ -48,7 +48,7 @@ if(NOT LX_LEGACY)
     add_definitions(-DLX_LEGACY=0)
 endif()
 
-add_definitions(-std=c99 -Wall -ggdb3)
+add_definitions(-std=c99 -Wall -ggdb3 -w)
 add_definitions(-D_FILE_OFFSET_BITS=64)
 
 
@@ -71,7 +71,7 @@ if(LX_LEGACY)
 endif()
 target_link_libraries(2ine "pthread")
 
-foreach(_I doscalls;msg;nls;quecalls;viocalls;kbdcalls;sesmgr;som;pmwin;pmshapi;pmgpi;tcpip32)
+foreach(_I msg;nls;quecalls;viocalls;kbdcalls;sesmgr;som;pmwin;pmshapi;pmgpi;tcpip32)
     add_library(${_I} SHARED "native/${_I}.c")
     if(LX_LEGACY)
         set_target_properties(${_I} PROPERTIES COMPILE_FLAGS "-m32")
@@ -80,6 +80,14 @@ foreach(_I doscalls;msg;nls;quecalls;viocalls;kbdcalls;sesmgr;som;pmwin;pmshapi;
     target_link_libraries(${_I} 2ine)
 endforeach()
 
+AUX_SOURCE_DIRECTORY(native/doscalls SRC_DOSCALLS) 
+add_library(doscalls SHARED ${SRC_DOSCALLS})
+if(LX_LEGACY)
+    set_target_properties(doscalls PROPERTIES COMPILE_FLAGS "-m32")
+    set_target_properties(doscalls PROPERTIES LINK_FLAGS "-m32 -ggdb3")
+endif()
+
+target_link_libraries(doscalls 2ine)
 target_link_libraries(doscalls "pthread")
 target_link_libraries(viocalls libncursesw.so)
 

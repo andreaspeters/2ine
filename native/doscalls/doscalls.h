@@ -9,7 +9,7 @@
 #ifndef _INCL_DOSCALLS_H_
 #define _INCL_DOSCALLS_H_
 
-#include "os2types.h"
+#include "../os2types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -17,6 +17,18 @@ extern "C" {
 
 #define CCHMAXPATH 260
 #define CCHMAXPATHCOMP 256
+
+typedef struct _FILELOCK {
+  LONG lOffset;
+  LONG lRange;
+} FILELOCK;
+typedef FILELOCK * PFILELOCK;
+
+typedef struct _FILELOCKL {
+  LONGLONG lOffset;
+  LONGLONG lRange;
+} FILELOCKL;
+typedef FILELOCKL * PFILELOCKL;
 
 enum
 {
@@ -622,6 +634,9 @@ OS2EXPORT APIRET OS2API DosSetFileSize(HFILE hFile, ULONG cbSize) OS2APIINFO(272
 OS2EXPORT APIRET OS2API DosSetCurrentDir(PSZ pszName) OS2APIINFO(255);
 OS2EXPORT APIRET OS2API DosBeep(ULONG freq, ULONG dur) OS2APIINFO(286);
 OS2EXPORT APIRET OS2API DosSetPriority(ULONG ulScope, ULONG ulClass, LONG lDelta, ULONG ulID) OS2APIINFO(236);
+OS2EXPORT APIRET OS2API DosCancelLockRequest(HFILE hFile, PFILELOCK pflLock) OS2APIINFO(429);
+
+
 
 #ifdef __cplusplus
 }

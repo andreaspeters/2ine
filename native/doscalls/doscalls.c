@@ -6,7 +6,7 @@
  *  This file written by Ryan C. Gordon.
  */
 
-#include "os2native16.h"
+#include "../os2native16.h"
 #include "doscalls.h"
 
 #include <unistd.h>
@@ -165,12 +165,6 @@ static void initHFileInfoFromUnixFd(const int fd, HFileInfo *info)
         info->flags = 0;
     } // else
 } // initHFileInfoFromUnixFd
-
-APIRET DosSetPriority(ULONG ulScope, ULONG ulClass, LONG lDelta, ULONG ulID)
-{
-    TRACE_NATIVE("DosSetPriority(%d, %d, %d, %d)", ulScope, ulClass, lDelta, ulID);
-    return 0;
-} // DosSetPriority
 
 APIRET DosGetInfoBlocks(PTIB *pptib, PPIB *pppib)
 {

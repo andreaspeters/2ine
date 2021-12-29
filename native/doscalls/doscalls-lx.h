@@ -452,6 +452,7 @@ LX_NATIVE_MODULE_INIT({ if (!init16_doscalls()) return 0; })
     LX_NATIVE_EXPORT(DosSetRelMaxFH, 382),
     LX_NATIVE_EXPORT(DosFlatToSel, 425),
     LX_NATIVE_EXPORT(DosSelToFlat, 426),
+    LX_NATIVE_EXPORT(DosCancelLockRequest, 429),
     LX_NATIVE_EXPORT(DosAllocThreadLocalMemory, 454),
     LX_NATIVE_EXPORT(DosFreeThreadLocalMemory, 455),
     LX_NATIVE_EXPORT(DosR3ExitAddr, 553),

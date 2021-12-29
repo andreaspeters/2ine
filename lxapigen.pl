@@ -21,9 +21,13 @@ sub typesize {
 }
 
 chdir(dirname(__FILE__)) or die("failed to chdir to script location: $!\n");
-my $dirname = 'native';
-opendir(DIRH, $dirname) or die("Failed to opendir '$dirname': $!\n");
 
+processDir("native");
+processDir("native/doscalls");
+
+sub processDir {
+  my $dirname = $_[0];
+  opendir(DIRH, $dirname) or die("Failed to opendir '$dirname': $!\n");
 while (readdir(DIRH)) {
     next if not /\.h\Z/;
     next if /\Aos2/;
@@ -256,6 +260,7 @@ EOF
 }
 
 closedir(DIRH);
+}
 
 # end of lxapigen.pl ...
 
