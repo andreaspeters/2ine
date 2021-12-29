@@ -1,3 +1,4 @@
+#include "../os2native.h"
 #include "doscalls.h"
 
 #include <unistd.h>
@@ -13,14 +14,16 @@
 #include <sys/resource.h>
 #include <sys/stat.h>
 
-#include "doscalls-lx.h"
-
-
-
 APIRET DosSetPriority(ULONG ulScope, ULONG ulClass, LONG lDelta, ULONG ulID)
 {
     TRACE_NATIVE("Unimplemented DosSetPriority(%d, %d, %d, %d)", ulScope, ulClass, lDelta, ulID);
     return 0;
 } // DosSetPriority
+
+APIRET Dos32CancelLockRequestL(HFILE hFile, PFILELOCKL pflLock)
+{
+    TRACE_NATIVE("Unimplemented DosCancelLockRequestL(%d, %d)", hFile, pflLock);
+    return 0;
+} // DosCancelLockRequestL
 
 

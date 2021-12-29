@@ -14,7 +14,7 @@
    @todo Add support of EAs
 
 */
-#include "../os2native16.h"
+#include "../os2native.h"
 #include "doscalls.h"
 
 #include <unistd.h>
@@ -29,8 +29,7 @@
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <sys/stat.h>
-
-#include "doscalls-lx.h"
+#include <bsd/string.h>
 
 // Safe functions
 
@@ -61,7 +60,6 @@
      DosFindNext
      DosFindClose
      DosQueryPathInfo
-     KalMove
 */
 
 //APIRET __cdecl   KalMove(PCSZ  pszOld,
@@ -376,7 +374,7 @@ APIRET CopyTree(PSZ pszSrc, PSZ pszDst, ULONG ulOptions, ULONG ulNeedDel)
     // Delete original dir,
     // if needed
     if (ulNeedDel)
-      DosDeleteDir(pszSrc);
+      //DosDeleteDir(pszSrc);
 
     *nsp = '\0';
     *ndp = '\0';
@@ -489,34 +487,29 @@ APIRET APIENTRY  Dos32Move(PSZ  pszOld, PSZ  pszNew)
   //Check arguments
   if ((!pszOld) || (!pszNew)) return ERROR_INVALID_PARAMETER;
 
-  // if move pszOld->pszNew crosses the volume
-  // boundary, then copy files and delete the old ones
-  if (KalMove((PSZ)pszOld, (PSZ)pszNew))
-  {
-    //Detect is source dir or file (also check is it exists)
-    rc = DosQueryPathInfo(pszOld,               // Path
-                          FIL_STANDARD,         // Level 1 information
-                          &fileStatus,          // Address of return buffer
-                          sizeof(FILESTATUS3)); // Size of buffer
+  //Detect is source dir or file (also check is it exists)
+  rc = DosQueryPathInfo(pszOld,               // Path
+                        FIL_STANDARD,         // Level 1 information
+                        &fileStatus,          // Address of return buffer
+                        sizeof(FILESTATUS3)); // Size of buffer
 
-    if (rc)
+  if (rc)
+  {
+    goto DOSMOVE_EXIT;
+  }
+
+  // Perfom action based on source path type
+  if (fileStatus.attrFile & FILE_DIRECTORY)
+    // DCPY_APPEND flag not valid in directory copy
+    rc = CopyTree((PSZ)pszOld, (PSZ)pszNew, 0, 1);
+  else
+  {
+    if (rc = CopyFile((PSZ)pszOld, (PSZ)pszNew, 0))
     {
       goto DOSMOVE_EXIT;
     }
 
-    // Perfom action based on source path type
-    if (fileStatus.attrFile & FILE_DIRECTORY)
-      // DCPY_APPEND flag not valid in directory copy
-      rc = CopyTree((PSZ)pszOld, (PSZ)pszNew, 0, 1);
-    else
-    {
-      if (rc = CopyFile((PSZ)pszOld, (PSZ)pszNew, 0))
-      {
-        goto DOSMOVE_EXIT;
-      }
-
-      rc = DosDelete(pszOld);
-    }
+    rc = DosDelete(pszOld);
   }
 
 DOSMOVE_EXIT:

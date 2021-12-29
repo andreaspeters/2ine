@@ -401,6 +401,7 @@ LX_NATIVE_MODULE_INIT({ if (!init16_doscalls()) return 0; })
     LX_NATIVE_EXPORT(Dos32Copy, 258),
     LX_NATIVE_EXPORT(DosDelete, 259),
     LX_NATIVE_EXPORT(DosDupHandle, 260),
+    LX_NATIVE_EXPORT(DosEditName, 261),
     LX_NATIVE_EXPORT(DosFindClose, 263),
     LX_NATIVE_EXPORT(DosFindFirst, 264),
     LX_NATIVE_EXPORT(DosFindNext, 265),
@@ -458,10 +459,12 @@ LX_NATIVE_MODULE_INIT({ if (!init16_doscalls()) return 0; })
     LX_NATIVE_EXPORT(DosAllocThreadLocalMemory, 454),
     LX_NATIVE_EXPORT(DosFreeThreadLocalMemory, 455),
     LX_NATIVE_EXPORT(DosR3ExitAddr, 553),
+    LX_NATIVE_EXPORT(DosSetFilePtrL, 568),
     LX_NATIVE_EXPORT(DosQueryHeaderInfo, 582),
     LX_NATIVE_EXPORT(DosQueryExtLIBPATH, 874),
     LX_NATIVE_EXPORT(DosQueryThreadContext, 877),
-    LX_NATIVE_EXPORT(DosOpenL, 981)
+    LX_NATIVE_EXPORT(DosOpenL, 981),
+    LX_NATIVE_EXPORT(Dos32CancelLockRequestL, 987)
 LX_NATIVE_MODULE_INIT_END()
 
 #endif /* LX_LEGACY */

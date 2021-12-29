@@ -84,13 +84,12 @@ AUX_SOURCE_DIRECTORY(native/doscalls SRC_DOSCALLS)
 add_library(doscalls SHARED ${SRC_DOSCALLS})
 if(LX_LEGACY)
     set_target_properties(doscalls PROPERTIES COMPILE_FLAGS "-m32")
-    set_target_properties(doscalls PROPERTIES LINK_FLAGS "-m32 -ggdb3")
+    set_target_properties(doscalls PROPERTIES LINK_FLAGS "-m32 -ggdb3 -lbsd")
 endif()
 
 target_link_libraries(doscalls 2ine)
 target_link_libraries(doscalls "pthread")
 target_link_libraries(viocalls libncursesw.so)
-
 target_link_libraries(2ine "SDL2")
 target_link_libraries(pmwin "SDL2")
 

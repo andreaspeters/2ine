@@ -1,4 +1,4 @@
-#include "../os2native16.h"
+#include "../os2native.h"
 #include "doscalls.h"
 
 #include <unistd.h>
@@ -13,8 +13,6 @@
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <sys/stat.h>
-
-#include "doscalls-lx.h"
 
 APIRET APIENTRY Dos32CancelLockRequest(HFILE hFile, PFILELOCK pflLock)
 {
@@ -32,8 +30,7 @@ APIRET APIENTRY Dos32CancelLockRequest(HFILE hFile, PFILELOCK pflLock)
   flLockL.lOffset=pflLock->lOffset;
   flLockL.lRange=pflLock->lRange;
 
-  rc = Dos32CancelLockRequestL(hFile,
-                             &flLockL);
+  rc = Dos32CancelLockRequestL(hFile, &flLockL);
   TRACE_NATIVE("flLock=%lx\n", *pflLock);
   TRACE_NATIVE("%s exit => %lx\n", __FUNCTION__, rc);
   return rc;
