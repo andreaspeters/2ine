@@ -14,24 +14,17 @@
 #include <sys/resource.h>
 #include <sys/stat.h>
 
-APIRET APIENTRY Dos32CancelLockRequest(HFILE hFile, PFILELOCK pflLock)
-{
+APIRET APIENTRY Dos32CancelLockRequest(HFILE hFile, PFILELOCK pflLock) {
+  TRACE_NATIVE("%s(%s, %lx)", __FUNCTION__, hFile, pflLock);
+
   FILELOCKL flLockL;
-  APIRET rc;
 
-  TRACE_NATIVE("%s enter\n", __FUNCTION__);
-  TRACE_NATIVE("hFile=%lx\n", hFile);
-
-  if (pflLock==NULL)
-  {
+  if (pflLock==NULL) {
     return ERROR_INVALID_PARAMETER;
   }
 
   flLockL.lOffset=pflLock->lOffset;
   flLockL.lRange=pflLock->lRange;
 
-  rc = Dos32CancelLockRequestL(hFile, &flLockL);
-  TRACE_NATIVE("flLock=%lx\n", *pflLock);
-  TRACE_NATIVE("%s exit => %lx\n", __FUNCTION__, rc);
-  return rc;
+  return Dos32CancelLockRequestL(hFile, &flLockL);
 };

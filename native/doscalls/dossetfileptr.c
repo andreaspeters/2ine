@@ -16,15 +16,7 @@
 #include <bsd/string.h>
 
 
-APIRET APIENTRY  DosSetFilePtrL(HFILE hFile, LONGLONG ib, ULONG method, PLONGLONG pibActual)
-{
-  APIRET rc;
-  TRACE_NATIVE("%s enter\n", __FUNCTION__);
-  TRACE_NATIVE("hFile=%lx\n", hFile);
-  TRACE_NATIVE("ib=%lld\n", ib);
-  TRACE_NATIVE("method=%lx\n", method);
-  rc = DosSetFilePtrL(hFile, ib, method, (ULONGLONG *)pibActual);
-  TRACE_NATIVE("ibActual=%lld\n", *pibActual);
-  TRACE_NATIVE("%s exit => %lx\n", __FUNCTION__, rc);
-  return rc;
+APIRET APIENTRY  DosSetFilePtrL(HFILE hFile, LONGLONG ib, ULONG method, PLONGLONG pibActual) {
+  TRACE_NATIVE("%s(%s, %d, %d, %d)", __FUNCTION__, hFile, ib, method, pibActual);
+  return DosSetFilePtrL(hFile, ib, method, (ULONGLONG *)pibActual);
 }

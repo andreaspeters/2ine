@@ -14,16 +14,13 @@
 #include <sys/resource.h>
 #include <sys/stat.h>
 
-APIRET DosSetPriority(ULONG ulScope, ULONG ulClass, LONG lDelta, ULONG ulID)
-{
-    TRACE_NATIVE("Unimplemented DosSetPriority(%d, %d, %d, %d)", ulScope, ulClass, lDelta, ulID);
+APIRET DosSetPriority(ULONG ulScope, ULONG ulClass, LONG lDelta, ULONG ulID) {
+    TRACE_NATIVE("Unimplemented %s(...)", __FUNCTION__);
     return 0;
-} // DosSetPriority
+}
 
-APIRET Dos32CancelLockRequestL(HFILE hFile, PFILELOCKL pflLock)
-{
-    TRACE_NATIVE("Unimplemented DosCancelLockRequestL(%d, %d)", hFile, pflLock);
+APIRET Dos32CancelLockRequestL(HFILE hFile, PFILELOCKL pflLock) {
+    TRACE_NATIVE("Unimplemented %s(...)", __FUNCTION__);
     return 0;
-} // DosCancelLockRequestL
-
+}
 

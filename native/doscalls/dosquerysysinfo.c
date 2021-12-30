@@ -14,9 +14,8 @@
 #include <sys/resource.h>
 #include <sys/stat.h>
 
-APIRET DosQuerySysInfo(ULONG first, ULONG last, PVOID _buf, ULONG buflen)
-{
-    TRACE_NATIVE("DosQuerySysInfo(%u, %u, %p, %u)", (uint) first, (uint) last, _buf, (uint) buflen);
+APIRET DosQuerySysInfo(ULONG first, ULONG last, PVOID _buf, ULONG buflen) {
+    TRACE_NATIVE("%s(%u, %u, %p, %u)", __FUNCTION__, (uint) first, (uint) last, _buf, (uint) buflen);
 
     uint32 *buf = (uint32 *) _buf;
     if (last < first) return ERROR_INVALID_PARAMETER;
