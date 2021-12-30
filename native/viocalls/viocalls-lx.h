@@ -9,6 +9,12 @@
 /* This is glue code for OS/2 binaries. Native binaries don't need this. */
 #if LX_LEGACY
 
+static APIRET16 bridge16to32_VioSetAnsi(uint8 *args) {
+    LX_NATIVE_MODULE_16BIT_BRIDGE_ARG(HVIO, VioHandle);
+    LX_NATIVE_MODULE_16BIT_BRIDGE_ARG(USHORT, Indicator);
+    return VioSetAnsi(Indicator, VioHandle);
+}
+
 static APIRET16 bridge16to32_VioScrollUp(uint8 *args) {
     LX_NATIVE_MODULE_16BIT_BRIDGE_ARG(HVIO, hvio);
     LX_NATIVE_MODULE_16BIT_BRIDGE_PTRARG(PBYTE, pCell);
@@ -87,6 +93,12 @@ static APIRET16 bridge16to32_VioWrtCharStrAtt(uint8 *args) {
     return VioWrtCharStrAtt(pch, cb, usRow, usColumn, pAttr, hvio);
 }
 
+static APIRET16 bridge16to32_VioSetState(uint8 *args) {
+    LX_NATIVE_MODULE_16BIT_BRIDGE_ARG(HVIO, VioHandle);
+    LX_NATIVE_MODULE_16BIT_BRIDGE_PTRARG(PVOID, RequestBlock);
+    return VioSetState(RequestBlock, VioHandle);
+}
+
 static APIRET16 bridge16to32_VioWrtNCell(uint8 *args) {
     LX_NATIVE_MODULE_16BIT_BRIDGE_ARG(HVIO, hvio);
     LX_NATIVE_MODULE_16BIT_BRIDGE_ARG(USHORT, usColumn);
@@ -97,6 +109,7 @@ static APIRET16 bridge16to32_VioWrtNCell(uint8 *args) {
 }
 
 LX_NATIVE_MODULE_16BIT_SUPPORT()
+    LX_NATIVE_MODULE_16BIT_API(VioSetAnsi)
     LX_NATIVE_MODULE_16BIT_API(VioScrollUp)
     LX_NATIVE_MODULE_16BIT_API(VioGetCurPos)
     LX_NATIVE_MODULE_16BIT_API(VioWrtCellStr)
@@ -107,6 +120,7 @@ LX_NATIVE_MODULE_16BIT_SUPPORT()
     LX_NATIVE_MODULE_16BIT_API(VioGetBuf)
     LX_NATIVE_MODULE_16BIT_API(VioSetCurType)
     LX_NATIVE_MODULE_16BIT_API(VioWrtCharStrAtt)
+    LX_NATIVE_MODULE_16BIT_API(VioSetState)
     LX_NATIVE_MODULE_16BIT_API(VioWrtNCell)
 LX_NATIVE_MODULE_16BIT_SUPPORT_END()
 
@@ -116,6 +130,7 @@ LX_NATIVE_MODULE_DEINIT({
 
 static int init16_viocalls(void) {
     LX_NATIVE_MODULE_INIT_16BIT_SUPPORT()
+        LX_NATIVE_INIT_16BIT_BRIDGE(VioSetAnsi, 4)
         LX_NATIVE_INIT_16BIT_BRIDGE(VioScrollUp, 16)
         LX_NATIVE_INIT_16BIT_BRIDGE(VioGetCurPos, 10)
         LX_NATIVE_INIT_16BIT_BRIDGE(VioWrtCellStr, 12)
@@ -126,12 +141,14 @@ static int init16_viocalls(void) {
         LX_NATIVE_INIT_16BIT_BRIDGE(VioGetBuf, 10)
         LX_NATIVE_INIT_16BIT_BRIDGE(VioSetCurType, 6)
         LX_NATIVE_INIT_16BIT_BRIDGE(VioWrtCharStrAtt, 16)
+        LX_NATIVE_INIT_16BIT_BRIDGE(VioSetState, 6)
         LX_NATIVE_INIT_16BIT_BRIDGE(VioWrtNCell, 12)
     LX_NATIVE_MODULE_INIT_16BIT_SUPPORT_END()
     return 1;
 }
 
 LX_NATIVE_MODULE_INIT({ if (!init16_viocalls()) return 0; })
+    LX_NATIVE_EXPORT16(VioSetAnsi, 5),
     LX_NATIVE_EXPORT16_DIFFERENT_NAME(VioScrollUp, "VIOSCROLLUP", 7),
     LX_NATIVE_EXPORT16_DIFFERENT_NAME(VioGetCurPos, "VIOGETCURPOS", 9),
     LX_NATIVE_EXPORT16_DIFFERENT_NAME(VioWrtCellStr, "VIOWRTCELLSTR", 10),
@@ -142,6 +159,7 @@ LX_NATIVE_MODULE_INIT({ if (!init16_viocalls()) return 0; })
     LX_NATIVE_EXPORT16_DIFFERENT_NAME(VioGetBuf, "VIOGETBUF", 31),
     LX_NATIVE_EXPORT16_DIFFERENT_NAME(VioSetCurType, "VIOSETCURTYPE", 32),
     LX_NATIVE_EXPORT16_DIFFERENT_NAME(VioWrtCharStrAtt, "VIOWRTCHARSTRATT", 48),
+    LX_NATIVE_EXPORT16(VioSetState, 51),
     LX_NATIVE_EXPORT16_DIFFERENT_NAME(VioWrtNCell, "VIOWRTNCELL", 52)
 LX_NATIVE_MODULE_INIT_END()
 

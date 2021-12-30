@@ -9,7 +9,7 @@
 #ifndef _INCL_VIOCALLS_H_
 #define _INCL_VIOCALLS_H_
 
-#include "os2types.h"
+#include "../os2types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -61,6 +61,8 @@ OS2EXPORT APIRET16 OS2API16 VioReadCellStr(PCH pchCellStr, PUSHORT pcb, USHORT u
 OS2EXPORT APIRET16 OS2API16 VioWrtCellStr(PCH pchCellStr, USHORT cb, USHORT usRow, USHORT usColumn, HVIO hvio) OS2APIINFO(ord=10,name=VIOWRTCELLSTR);
 OS2EXPORT APIRET16 OS2API16 VioWrtCharStrAtt(PCH pch, USHORT cb, USHORT usRow, USHORT usColumn, PBYTE pAttr, HVIO hvio) OS2APIINFO(ord=48,name=VIOWRTCHARSTRATT);
 OS2EXPORT APIRET16 OS2API16 VioWrtNCell(PBYTE pCell, USHORT cb, USHORT usRow, USHORT usColumn, HVIO hvio) OS2APIINFO(ord=52,name=VIOWRTNCELL);
+OS2EXPORT APIRET16 OS2API16 VioSetAnsi(USHORT Indicator, HVIO VioHandle) OS2APIINFO(5);
+OS2EXPORT APIRET16 OS2API16 VioSetState(PVOID RequestBlock, HVIO VioHandle) OS2APIINFO(51);
 
 #ifdef __cplusplus
 }

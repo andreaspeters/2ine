@@ -6,7 +6,7 @@
  *  This file written by Ryan C. Gordon.
  */
 
-#include "os2native16.h"
+#include "../os2native16.h"
 #include "viocalls.h"
 
 // os2types.h defines these, but so does curses.
