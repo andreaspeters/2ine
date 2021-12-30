@@ -18,15 +18,30 @@
 #define IOBUF_SIZ 8192
 APIRET CopyDir(PSZ pszSrc, PSZ pszDst, ULONG ulOptions);
 APIRET CopyFile(PSZ pszSrc, PSZ pszDst, ULONG ulOptions);
+char *FolderNameCatFileName(PSZ folderName, PSZ fileName);
 
+
+// Concat Foldername and Filename 
+char *FolderNameCatFileName(PSZ folderName, PSZ fileName) {
+  TRACE_NATIVE("%s(%s, %s)", __FUNCTION__, folderName, fileName);
+
+  char *filename;
+  strcpy(filename, folderName);
+  strcat(filename, "/");
+  strcat(filename, fileName);
+
+  return filename;
+}
+
+// Copy a whole directory tree
 APIRET CopyDir(PSZ pszSrc, PSZ pszDst, ULONG ulOptions) {
   TRACE_NATIVE("%s(%s, %s, %d)", __FUNCTION__, pszSrc, pszDst, ulOptions);
 
   APIRET rc;
   DIR *dir;
   struct dirent *entry;
-  char dstfilename[255];
-  char srcfilename[255];
+  char *dstfilename;
+  char *srcfilename;
 
   if ((dir = opendir(pszSrc)) == NULL) {
       perror("opendir() error");
@@ -36,13 +51,9 @@ APIRET CopyDir(PSZ pszSrc, PSZ pszDst, ULONG ulOptions) {
         continue;
       }
 
-      strcpy(dstfilename, pszDst);
-      strcat(dstfilename, "/");
-      strcat(dstfilename, entry->d_name);
-
-      strcpy(srcfilename, pszSrc);
-      strcat(srcfilename, "/");
-      strcat(srcfilename, entry->d_name);
+      srcfilename = FolderNameCatFileName(pszSrc, entry->d_name);
+      dstfilename = FolderNameCatFileName(pszDst, entry->d_name);
+      
       TRACE_NATIVE("%s: %s, %s, %s", __FUNCTION__, entry->d_name, dstfilename, srcfilename);
       rc = CopyFile((PSZ)srcfilename, (PSZ)dstfilename, ulOptions); 
     }
@@ -88,6 +99,8 @@ APIRET CopyFile(PSZ pszSrc, PSZ pszDst, ULONG ulOptions) {
   /* Close file descriptors */
   close (infd);
   close (outfd);  
+
+  // TODO:
 /*
   if (!(ulOptions&DCPY_EXISTING))
   {
@@ -108,12 +121,12 @@ APIRET CopyFile(PSZ pszSrc, PSZ pszDst, ULONG ulOptions) {
 }
 
 APIRET APIENTRY Dos32Copy(PSZ pszOld, PSZ pszNew, ULONG ulOptions) {
+  TRACE_NATIVE("%s(%s, %s, %lx)", __FUNCTION__, pszOld, pszNew, ulOptions);
+
   FILESTATUS3 fileStatus;
   APIRET rc;
 
   #define DCPY_MASK ~(DCPY_EXISTING | DCPY_APPEND | DCPY_FAILEAS )
-
-  TRACE_NATIVE("%s(%s, %s, %lx)", __FUNCTION__, pszOld, pszNew, ulOptions);
 
   //Check arguments
   if ((!pszOld) || (!pszNew)) return ERROR_INVALID_PARAMETER;
@@ -122,7 +135,6 @@ APIRET APIENTRY Dos32Copy(PSZ pszOld, PSZ pszNew, ULONG ulOptions) {
 
   //Detect is source dir or file (also check is it exists)
   rc = DosQueryPathInfo(pszOld, FIL_STANDARD, &fileStatus, sizeof(FILESTATUS3));
-
   if (rc) {
     return rc;
   }
@@ -138,19 +150,17 @@ APIRET APIENTRY Dos32Copy(PSZ pszOld, PSZ pszNew, ULONG ulOptions) {
   return rc;
 }
 
-
 APIRET APIENTRY  Dos32Move(PSZ  pszOld, PSZ  pszNew) {
+  TRACE_NATIVE("%s(%s, %s)", __FUNCTION__, pszOld, pszNew);
+
   FILESTATUS3 fileStatus;
   APIRET rc;
-
-  TRACE_NATIVE("%s(%s, %s)", __FUNCTION__, pszOld, pszNew);
 
   //Check arguments
   if ((!pszOld) || (!pszNew)) return ERROR_INVALID_PARAMETER;
 
   //Detect is source dir or file (also check is it exists)
   rc = DosQueryPathInfo(pszOld, FIL_STANDARD,  &fileStatus, sizeof(FILESTATUS3)); 
-
   if (rc) {
     return rc;
   }
@@ -158,7 +168,8 @@ APIRET APIENTRY  Dos32Move(PSZ  pszOld, PSZ  pszNew) {
   // Perfom action based on source path type
   if (fileStatus.attrFile & FILE_DIRECTORY) {
     // DCPY_APPEND flag not valid in directory copy
-    //rc = CopyTree((PSZ)pszOld, (PSZ)pszNew, 0, 1);
+    // TODO: Remove files
+    rc = CopyDir((PSZ)pszOld, (PSZ)pszNew, 0);
   } else {
     if (rc = CopyFile((PSZ)pszOld, (PSZ)pszNew, 0)) {
       return rc;
