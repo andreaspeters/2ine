@@ -15,15 +15,12 @@
 #include <sys/stat.h>
 #include <string.h>
 
-#define DATASPACE_READ    0x00000001
-#define DATASPACE_WRITE   0x00000002
+APIRET DosGetNamedSharedMem(PPVOID pBaseAddress, PSZ pszName, ULONG ulFlags) {
+  TRACE_NATIVE("%s(%s, %s, %s)", __FUNCTION__, pBaseAddress, pszName, ulFlags);
 
-APIRET DosGetNamedSharedMem(PPVOID ppb, PSZ pszName, ULONG flag) {
-  TRACE_NATIVE("%s(%s, %s, %s)", __FUNCTION__, ppb, pszName, flag);
+  int shmFd;
 
-  ULONG rights = 0;
-
-  if (! ppb || ! pszName)
+  if (! pBaseAddress || ! pszName)
     return ERROR_INVALID_PARAMETER;
 
   while(*pszName) {
@@ -35,19 +32,8 @@ APIRET DosGetNamedSharedMem(PPVOID ppb, PSZ pszName, ULONG flag) {
     return ERROR_INVALID_NAME;
   }
 
-  if (flag & PAG_READ) {
-    rights |= DATASPACE_READ;
-  }
-
-  if (flag & PAG_WRITE) {
-    rights |= DATASPACE_WRITE;
-  }
-
-  if (flag & PAG_EXECUTE) {
-    rights |= DATASPACE_READ;
-  }
-
-  ppb = shm_open(pszName, flag, 0666);
+  shmFd = shm_open(pszName, ulFlags, 0666);
+  pBaseAddress = mmap(0, 8193, PROT_WRITE, MAP_SHARED, shmFd, 0);
 
   return 0;
 }
