@@ -15,7 +15,7 @@
 #include <sys/stat.h>
 
 APIRET APIENTRY Dos32CancelLockRequest(HFILE hFile, PFILELOCK pflLock) {
-  TRACE_NATIVE("%s(%s, %lx)", __FUNCTION__, hFile, pflLock);
+  TRACE_NATIVE("%s(%s, %p)", __FUNCTION__, hFile, pflLock);
 
   FILELOCKL flLockL;
 

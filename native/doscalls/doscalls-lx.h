@@ -392,6 +392,8 @@ LX_NATIVE_MODULE_INIT({ if (!init16_doscalls()) return 0; })
     LX_NATIVE_EXPORT(DosSleep, 229),
     LX_NATIVE_EXPORT(DosGetDateTime, 230),
     LX_NATIVE_EXPORT(DosDevConfig, 231),
+    LX_NATIVE_EXPORT(DosEnterCritSec, 232),
+    LX_NATIVE_EXPORT(DosExitCritSec, 233),
     LX_NATIVE_EXPORT(DosExit, 234),
     LX_NATIVE_EXPORT(DosSetPriority, 236),
     LX_NATIVE_EXPORT(DosResetBuffer, 254),
@@ -467,7 +469,9 @@ LX_NATIVE_MODULE_INIT({ if (!init16_doscalls()) return 0; })
     LX_NATIVE_EXPORT(DosQueryExtLIBPATH, 874),
     LX_NATIVE_EXPORT(DosQueryThreadContext, 877),
     LX_NATIVE_EXPORT(DosOpenL, 981),
-    LX_NATIVE_EXPORT(Dos32CancelLockRequestL, 987)
+    LX_NATIVE_EXPORT(Dos32CancelLockRequestL, 987),
+    LX_NATIVE_EXPORT(DosNameConversion, 1000),
+    LX_NATIVE_EXPORT(DosFtok, 1001)
 LX_NATIVE_MODULE_INIT_END()
 
 #endif /* LX_LEGACY */

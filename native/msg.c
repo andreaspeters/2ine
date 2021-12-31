@@ -71,115 +71,18 @@ APIRET16 Dos16TrueGetMessage(PVOID pTable, USHORT cTable, PCHAR pData, USHORT cb
     return NO_ERROR;
 }
 
+APIRET DosTrueGetMessage(PVOID pTable, USHORT cTable, PCHAR pData, USHORT cbBuf, USHORT msgnum, PCHAR pFilename, PUSHORT pcbMsg, PVOID msgseg)
+{
+    TRACE_NATIVE("DosTrueGetMessage(%p, %u, %p, %u, %u, %p, %p, %p)", pTable, cTable, pData, cbBuf, msgnum, pFilename, pcbMsg, msgseg);
+
+    return Dos16TrueGetMessage(pTable, cTable, pData, cbBuf, msgnum, pFilename, pcbMsg, msgseg);
+}
+
 APIRET DosInsertMessage(PCHAR *pTable, ULONG cTable, PSZ pszMsg, ULONG cbMsg, PCHAR pBuf, ULONG cbBuf, PULONG pcbMsg) {
   TRACE_NATIVE("Unimplemented %s(...)", __FUNCTION__);
   return -1;
 }
 
-APIRET16 DosTrueGetMessage(void *MsgSeg, PCHAR *Table, ULONG TableSize, PCHAR Buf, ULONG BufSize, ULONG MsgNumber, PSZ FileName, PULONG MsgSize) {
-  TRACE_NATIVE("%s(%s, %s, %s, %s, %s, %s, %s, %s)", __FUNCTION__, MsgSeg, Table, TableSize, Buf, BufSize, MsgNumber, FileName, MsgSize);
-
-  APIRET rc = NO_ERROR;
-  ULONG  cbFile;
-  void   *buf;
-  char   *msg;
-  char   id[4];
-  char   str[CCHMAXPATH];
-  msghdr_t *hdr = (msghdr_t *)MsgSeg;
-  int    msgoff, msgend, msglen, i;
-
-  ULONG  len;
-
-  /* Check arguments */
-  if (TableSize > 9) {
-    return ERROR_MR_INV_IVCOUNT;
-  }
-
-  if (!Buf || !BufSize) {
-    return ERROR_INVALID_PARAMETER;
-  }
-
-  if (!MsgSeg) {
-    return ERROR_MR_UN_ACC_MSGF; // Unable to access message file
-  }
-
-  // from this point, the file/msg seg is loaded at msgSeg address
-  msg = (char *)MsgSeg;  // message pointer
-  hdr = (msghdr_t *)msg; // message header
-  MsgNumber -= hdr->firstmsgno;
-
-  if (MsgNumber > hdr->msgs_no) {
-    return ERROR_MR_MID_NOT_FOUND; // ???
-  }
-
-  // get message offset
-  if (hdr->is_offs_16bits) // if offset is 16 bits
-    msgoff = (int)(*(unsigned short *)(msg + hdr->idx_ofs + 2 * MsgNumber));
-  else // it is 32 bits
-    msgoff = (int)(*(unsigned long *)(msg + hdr->idx_ofs + 4 * MsgNumber));
-
-  if (MsgNumber + 1 == hdr->msgs_no) {
-    if (hdr->next_ctry_info)
-      msgend = hdr->next_ctry_info;
-    else
-      msgend = cbFile; // EOF
-  }
-  else
-  {
-    // get next message offset
-    if (hdr->is_offs_16bits) // if offset is 16 bits
-      msgend = (int)(*(unsigned short *)(msg + hdr->idx_ofs + 2 * (MsgNumber + 1)));
-    else // it is 32 bits
-      msgend = (int)(*(unsigned long *)(msg + hdr->idx_ofs + 4 * (MsgNumber + 1)));
-  }
-
-  if (msgoff > cbFile || msgend > cbFile) {
-    return ERROR_MR_MSG_TOO_LONG;
-  }
-
-  // message length
-  msglen = msgend - msgoff - 1;
-
-  // msg now points to the desired message
-  msg += msgoff;
-
-  // OS/2 actually does not check for prefixes
-  //if (*msg != 'E' && *msg != 'W' &&
-  //    *msg != 'P' && *msg != 'I' &&
-  //    *msg != 'H' && *msg != '?')
-  //  {
-  //    rc = ERROR_MR_INV_MSGF_FORMAT;
-  //    goto DOSTRUEGETMESSAGE_EXIT;
-  //  }
-
-  // message file ID
-  strncpy(id, hdr->id, 3);
-  id[3] = '\0';
-
-  /* switch (*msg)
-  {
-    case 'E': // Error
-    case 'W': // Warning
-    case 'I': // Info
-      // prepend the Warning/Error ID (like SYS3175: )
-      sprintf(str, "%s%04u: ", id, msgnumber);
-      DosPutMessage(1, strlen(str), str);
-      break;
-    default:
-      break;
-  } */
-
-  // skip message type letter
-  msg++;
-
-  // substitute %? to the actual parameters
-  rc = DosInsertMessage(Table, TableSize, msg, msglen, Buf, BufSize, MsgSize);
-
-  // finally, free file buffer
-  DosFreeMem(buf);
-
-  return rc;
-}
 
 // end of msg.c ...
 

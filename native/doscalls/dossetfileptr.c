@@ -17,6 +17,7 @@
 
 
 APIRET APIENTRY  DosSetFilePtrL(HFILE hFile, LONGLONG ib, ULONG method, PLONGLONG pibActual) {
-  TRACE_NATIVE("%s(%s, %d, %d, %d)", __FUNCTION__, hFile, ib, method, pibActual);
+  TRACE_NATIVE("%s(...)", __FUNCTION__);
+
   return DosSetFilePtrL(hFile, ib, method, (ULONGLONG *)pibActual);
 }

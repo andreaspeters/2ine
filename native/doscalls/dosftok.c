@@ -51,61 +51,43 @@
 #include <sys/resource.h>
 #include <sys/stat.h>
 #include <sys/ipc.h>
-#include <sys/shm.h>
 #include <string.h>
 
-APIRET DosAllocSharedMem(PPVOID pBaseAddress, PSZ pszName, ULONG ulObjectSize, ULONG ulFlags ) {
+key_t APIENTRY DosFtok(PSZ pszName) {
   TRACE_NATIVE("%s(%s)", __FUNCTION__, pszName);
-  
-  key_t mykey = 0;
-  PSZ pszNewName;
+
+  key_t mykey = -1; /* default is an error indicator */
+  PSZ fsName;
+  static char tempdir[] = "/tmp";
+  struct stat statbuf;
   int rc;
-  void * shmaddr;
-  int shmat_flag = 0;
 
-  if (pszName == NULL) {
-      return ERROR_INVALID_NAME;
-  }
+  /* append Linux temporary directory to the front of the name */
+  fsName = alloca(strlen(tempdir) + strlen(pszName) + 1);
+  strcpy(fsName, tempdir);
+  strcat(fsName, pszName);
 
-  /* convert the name to Linux format */
-  pszNewName = alloca(strlen(pszName) + 1);
-  if (pszNewName == NULL) {
-      return ERROR_NOT_ENOUGH_MEMORY;
-  }
-  strcpy(pszNewName, pszName);
-  DosNameConversion(pszNewName, "\\", ".", TRUE);
-  if (*pszNewName == '.') {
-      *pszNewName = '/';
-  }
-
-  /* get a key for the shared memory */
-  mykey = DosFtok(pszNewName);
-  if (mykey == -1) {
-      return ERROR_INVALID_PARAMETER;
-  }
-
-  /* get the shared memory id */
-  rc = shmget(mykey, ulObjectSize, IPC_CREAT | IPC_EXCL | S_IRWXU | S_IRWXG);
-  if (rc == -1) {
+  /* make sure the file exists */
+  rc = stat(fsName, &statbuf);
+  if (rc) {
       switch (errno) {
-      case EEXIST:
-          return ERROR_ALREADY_EXISTS;
       case ENOENT:
-          return ERROR_INVALID_NAME;
+      case ENOTDIR:
+          /* file not found, so create it */
+          rc = open(fsName, O_CREAT | O_EXCL, S_IRWXU | S_IRWXG);
+          if (rc == -1) {
+              return mykey;
+          }
+          close(rc);
+          break;
       default:
-          return ERROR_NOT_ENOUGH_MEMORY;
+          return mykey;
       }
   }
 
-  /* attach memory and set the address of it */
-  if (!(ulFlags & PAG_WRITE)) {
-      shmat_flag = 1;
-  }
-  shmaddr = shmat(rc, NULL, shmat_flag);
-  if (shmaddr == (void *)-1) {
-      return ERROR_NOT_ENOUGH_MEMORY;
-  }
-  *pBaseAddress = shmaddr;
+  /* now that we know the file exists we can ftok it */
+  mykey = ftok(fsName, 'O');
 
-  return NO_ERROR;
+  return mykey;
 }
+

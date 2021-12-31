@@ -50,62 +50,50 @@
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <sys/stat.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
 #include <string.h>
 
-APIRET DosAllocSharedMem(PPVOID pBaseAddress, PSZ pszName, ULONG ulObjectSize, ULONG ulFlags ) {
+VOID DosNameConversion(PSZ pszName, PUCHAR pSeparator, PUCHAR pRepl, BOOL uc) {
   TRACE_NATIVE("%s(%s)", __FUNCTION__, pszName);
-  
-  key_t mykey = 0;
-  PSZ pszNewName;
-  int rc;
-  void * shmaddr;
-  int shmat_flag = 0;
+
+  CHAR separator;
+  CHAR replacement;
+  PSZ tempName;
 
   if (pszName == NULL) {
-      return ERROR_INVALID_NAME;
+      return;
   }
 
-  /* convert the name to Linux format */
-  pszNewName = alloca(strlen(pszName) + 1);
-  if (pszNewName == NULL) {
-      return ERROR_NOT_ENOUGH_MEMORY;
+  /* set the delimiter to convert */
+  if (pSeparator == NULL) {
+      separator = '\\';
   }
-  strcpy(pszNewName, pszName);
-  DosNameConversion(pszNewName, "\\", ".", TRUE);
-  if (*pszNewName == '.') {
-      *pszNewName = '/';
+  else {
+      separator = *pSeparator;
   }
 
-  /* get a key for the shared memory */
-  mykey = DosFtok(pszNewName);
-  if (mykey == -1) {
-      return ERROR_INVALID_PARAMETER;
+  /* set the replacement character */
+  if (pRepl == NULL) {
+      replacement = '/';
+  }
+  else {
+      replacement = *pRepl;
   }
 
-  /* get the shared memory id */
-  rc = shmget(mykey, ulObjectSize, IPC_CREAT | IPC_EXCL | S_IRWXU | S_IRWXG);
-  if (rc == -1) {
-      switch (errno) {
-      case EEXIST:
-          return ERROR_ALREADY_EXISTS;
-      case ENOENT:
-          return ERROR_INVALID_NAME;
-      default:
-          return ERROR_NOT_ENOUGH_MEMORY;
+  /* now convert the characters */
+  tempName = pszName;
+  while (*tempName != '\0') {
+      if (*tempName == separator) {
+          *tempName = replacement;
+      }
+      tempName++;
+  }
+
+  /* covert the name to upper case if necessary */
+  if (uc) {
+      tempName = pszName;
+      while (*tempName) {
+          *tempName = (CHAR)toupper(*tempName);
+          tempName++;
       }
   }
-
-  /* attach memory and set the address of it */
-  if (!(ulFlags & PAG_WRITE)) {
-      shmat_flag = 1;
-  }
-  shmaddr = shmat(rc, NULL, shmat_flag);
-  if (shmaddr == (void *)-1) {
-      return ERROR_NOT_ENOUGH_MEMORY;
-  }
-  *pBaseAddress = shmaddr;
-
-  return NO_ERROR;
 }

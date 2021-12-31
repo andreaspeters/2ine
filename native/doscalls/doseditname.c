@@ -16,7 +16,7 @@
 
 
 APIRET DosEditName(ULONG metalevel, PSZ pszSource, PSZ pszEdit, PSZ pszTarget, ULONG cbTarget) {
-  TRACE_NATIVE("%s(%d, %s, %s, %s, %d)", __FUNCTION__, metalevel, pszSource, pszEdit, pszTarget, cbTarget);
+  TRACE_NATIVE("%s(...)", __FUNCTION__);
 
   if (metalevel != 1) {
     return ERROR_INVALID_PARAMETER;

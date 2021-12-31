@@ -24,9 +24,19 @@ APIRET Dos32CancelLockRequestL(HFILE hFile, PFILELOCKL pflLock) {
   return 0;
 }
 
-
 APIRET DosQueryMem(PPVOID pBaseAddress, PULONG pulRegionSize, PULONG pulAllocationFlags ) {
+  TRACE_NATIVE("Unimplemented %s(...)", __FUNCTION__);
+  return ERROR_ACCESS_DENIED;
+}
+
+APIRET DosEnterCritSec() {
   TRACE_NATIVE("Unimplemented %s(...)", __FUNCTION__);
   return 0;
 }
+
+APIRET DosExitCritSec() {
+  TRACE_NATIVE("Unimplemented %s(...)", __FUNCTION__);
+  return 0;
+}
+
 

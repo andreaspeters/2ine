@@ -33,8 +33,8 @@ typedef struct {
 
 OS2EXPORT APIRET16 OS2API16 Dos16PutMessage(USHORT hfile, USHORT cbMsg, PCHAR pBuf) OS2APIINFO(ord=1,name=DOSPUTMESSAGE);
 OS2EXPORT APIRET16 OS2API16 Dos16TrueGetMessage(PVOID pTable, USHORT cTable, PCHAR pData, USHORT cbBuf, USHORT msgnum, PCHAR pFilename, PUSHORT pcbMsg, PVOID msgseg) OS2APIINFO(ord=2,name=DOSTRUEGETMESSAGE);
+OS2EXPORT APIRET OS2API DosTrueGetMessage(PVOID pTable, USHORT cTable, PCHAR pData, USHORT cbBuf, USHORT msgnum, PCHAR pFilename, PUSHORT pcbMsg, PVOID msgseg) OS2APIINFO(6);
 OS2EXPORT APIRET OS2API DosPutMessage(HFILE hfile, ULONG cbMsg, PCHAR pBuf) OS2APIINFO(5);
-OS2EXPORT APIRET16 OS2API DosTrueGetMessage(void *MsgSeg, PCHAR *Table, ULONG TableSize, PCHAR Buf, ULONG BufSize, ULONG MsgNumber, PSZ FileName, PULONG MsgSize) OS2APIINFO(6);
 OS2EXPORT APIRET OS2API DosInsertMessage(PCHAR *pTable, ULONG cTable, PSZ pszMsg, ULONG cbMsg, PCHAR pBuf, ULONG cbBuf, PULONG pcbMsg) OS2APIINFO(4);
 
 #ifdef __cplusplus

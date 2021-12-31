@@ -10,6 +10,7 @@
 #define _INCL_DOSCALLS_H_
 
 #include "../os2types.h"
+#include <sys/ipc.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -640,7 +641,10 @@ OS2EXPORT APIRET OS2API DosEditName(ULONG metalevel, PSZ pszSource, PSZ pszEdit,
 OS2EXPORT APIRET OS2API DosGetNamedSharedMem(PPVOID pBaseAddress, PSZ pszName, ULONG ulFlags) OS2APIINFO(301);
 OS2EXPORT APIRET OS2API DosAllocSharedMem(PPVOID pBaseAddress, PSZ pszName, ULONG ulObjectSize, ULONG ulFlags ) OS2APIINFO(300);
 OS2EXPORT APIRET OS2API DosQueryMem(PPVOID pBaseAddress, PULONG pulRegionSize, PULONG pulAllocationFlags ) OS2APIINFO(306);
-
+OS2EXPORT APIRET OS2API DosEnterCritSec() OS2APIINFO(232);
+OS2EXPORT APIRET OS2API DosExitCritSec() OS2APIINFO(233);
+OS2EXPORT VOID OS2API DosNameConversion(PSZ pszName, PUCHAR pSeparator, PUCHAR pRepl, BOOL uc) OS2APIINFO(1000);
+OS2EXPORT key_t OS2API DosFtok(PSZ pszName) OS2APIINFO(1001);
 
 
 
