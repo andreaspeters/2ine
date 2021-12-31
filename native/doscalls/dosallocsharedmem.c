@@ -1,4 +1,3 @@
-
 #include "../os2native.h"
 #include "doscalls.h"
 
@@ -17,19 +16,14 @@
 #include <string.h>
 
 APIRET DosAllocSharedMem(PPVOID pBaseAddress, PSZ pszName, ULONG ulObjectSize, ULONG ulFlags ) {
-  TRACE_NATIVE("%s(%s, %s, %s)", __FUNCTION__, pBaseAddress, pszName, ulObjectSize, ulFlags);
+  TRACE_NATIVE("%s(%s)", __FUNCTION__, pszName);
   
   int shmFd;
 
   if (! pBaseAddress || ! pszName)
     return ERROR_INVALID_PARAMETER;
 
-  while(*pszName) {
-    *pszName=toupper(*pszName);
-    pszName++;
-  }
-
-  if (strstr(pszName, "\\SHAREMEM\\") != pszName) {
+  if (!strcasestr(pszName, "\\SHAREMEM\\")) {
     return ERROR_INVALID_NAME;
   }
 
