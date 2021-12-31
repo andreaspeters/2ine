@@ -12,6 +12,7 @@ int main(VOID) {
   ULONG AttributeFlags;
   APIRET rc;
    
+  printf("DosGetNamdSharedMem Start\n");
   strcpy(Name,"\\SHAREMEM\\BLOCK.DAT");   
   AttributeFlags = 0x00000001;
 
