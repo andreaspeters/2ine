@@ -56,6 +56,13 @@
 
 APIRET DosAllocSharedMem(PPVOID pBaseAddress, PSZ pszName, ULONG ulObjectSize, ULONG ulFlags ) {
   TRACE_NATIVE("%s(%s)", __FUNCTION__, pszName);
+
+  return DosAllocCreateSharedMem(pBaseAddress, pszName, ulObjectSize, ulFlags, TRUE);
+}
+
+
+APIRET DosAllocCreateSharedMem(PPVOID pBaseAddress, PSZ pszName, ULONG ulObjectSize, ULONG ulFlags, BOOL create ) {
+  TRACE_NATIVE("%s(%s)", __FUNCTION__, pszName);
   
   key_t mykey = 0;
   PSZ pszNewName;
@@ -81,16 +88,23 @@ APIRET DosAllocSharedMem(PPVOID pBaseAddress, PSZ pszName, ULONG ulObjectSize, U
   /* get a key for the shared memory */
   mykey = DosFtok(pszNewName);
   if (mykey == -1) {
+      TRACE_NATIVE(">>> %s DosFtok rc=INVALID PARAMETER)", __FUNCTION__);
       return ERROR_INVALID_PARAMETER;
   }
 
   /* get the shared memory id */
-  rc = shmget(mykey, ulObjectSize, IPC_CREAT | IPC_EXCL | S_IRWXU | S_IRWXG);
+  if (create) {
+    rc = shmget(mykey, ulObjectSize, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH | IPC_CREAT);
+  } else {
+    rc = shmget(mykey, 0, S_IRWXU | S_IRWXG);
+  }
   if (rc == -1) {
       switch (errno) {
       case EEXIST:
+          TRACE_NATIVE(">>> %s shmget rc=ALREADY EXISTS)", __FUNCTION__);
           return ERROR_ALREADY_EXISTS;
       case ENOENT:
+          TRACE_NATIVE(">>> %s shmget rc=INVALID NAME)", __FUNCTION__);
           return ERROR_INVALID_NAME;
       default:
           return ERROR_NOT_ENOUGH_MEMORY;
@@ -99,7 +113,7 @@ APIRET DosAllocSharedMem(PPVOID pBaseAddress, PSZ pszName, ULONG ulObjectSize, U
 
   /* attach memory and set the address of it */
   if (!(ulFlags & PAG_WRITE)) {
-      shmat_flag = 1;
+      shmat_flag = SHM_RDONLY;
   }
   shmaddr = shmat(rc, NULL, shmat_flag);
   if (shmaddr == (void *)-1) {

@@ -471,7 +471,8 @@ LX_NATIVE_MODULE_INIT({ if (!init16_doscalls()) return 0; })
     LX_NATIVE_EXPORT(DosOpenL, 981),
     LX_NATIVE_EXPORT(Dos32CancelLockRequestL, 987),
     LX_NATIVE_EXPORT(DosNameConversion, 1000),
-    LX_NATIVE_EXPORT(DosFtok, 1001)
+    LX_NATIVE_EXPORT(DosFtok, 1001),
+    LX_NATIVE_EXPORT(DosAllocCreateSharedMem, 1002)
 LX_NATIVE_MODULE_INIT_END()
 
 #endif /* LX_LEGACY */

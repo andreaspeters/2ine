@@ -73,6 +73,7 @@ key_t APIENTRY DosFtok(PSZ pszName) {
       switch (errno) {
       case ENOENT:
       case ENOTDIR:
+          TRACE_NATIVE(">>> %s: File not found, create one.", __FUNCTION__);
           /* file not found, so create it */
           rc = open(fsName, O_CREAT | O_EXCL, S_IRWXU | S_IRWXG);
           if (rc == -1) {
