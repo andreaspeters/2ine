@@ -6,9 +6,8 @@
  *  This file written by Ryan C. Gordon.
  */
 
-#include "os2native.h"
+#include "../os2native.h"
 #include "pmwin.h"
-#include "SDL.h"
 
 #include "pmwin-lx.h"
 

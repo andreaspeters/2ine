@@ -10,7 +10,7 @@
 #define _INCL_PMGPI_H_
 
 #include "os2types.h"
-#include "pmwin.h"
+#include "pmwin/pmwin.h"
 
 #ifdef __cplusplus
 extern "C" {

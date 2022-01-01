@@ -25,6 +25,7 @@ chdir(dirname(__FILE__)) or die("failed to chdir to script location: $!\n");
 processDir("native");
 processDir("native/doscalls");
 processDir("native/viocalls");
+processDir("native/pmwin");
 
 sub processDir {
   my $dirname = $_[0];
