@@ -78,7 +78,6 @@ foreach(_I msg;nls;quecalls;kbdcalls;sesmgr;som;pmshapi;pmgpi;tcpip32)
         set_target_properties(${_I} PROPERTIES LINK_FLAGS "-m32 -ggdb3")
     endif()
     target_link_libraries(${_I} 2ine)
-    target_link_libraries(${_I} doscalls)
 endforeach()
 
 AUX_SOURCE_DIRECTORY(native/viocalls SRC_VIOCALLS) 
@@ -109,9 +108,7 @@ target_link_libraries(doscalls "bsd")
 
 target_link_libraries(viocalls libncursesw.so)
 target_link_libraries(2ine "SDL2")
-target_link_libraries(2ine "SDL2main")
 target_link_libraries(pmwin "SDL2")
-target_link_libraries(pmwin "SDL2main")
 
 add_executable(lx_dump lx_dump.c)
 
