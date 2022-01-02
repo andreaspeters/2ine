@@ -48,9 +48,12 @@ if(NOT LX_LEGACY)
     add_definitions(-DLX_LEGACY=0)
 endif()
 
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
+
 add_definitions(-std=c99 -Wall -ggdb3 -w)
 add_definitions(-D_FILE_OFFSET_BITS=64)
-
+add_definitions(${GTK3_CFLAGS_OTHER})
 
 set(CURSES_NEED_WIDE TRUE)
 set(CURSES_NEED_NCURSES TRUE)
@@ -60,9 +63,8 @@ if(NOT CURSES_FOUND)
 endif()
 
 include_directories(${CURSES_INCLUDE_DIR})
-
-find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
+include_directories(${GTK3_INCLUDE_DIRS})
 
 add_library(2ine SHARED "lib2ine.c")
 if(LX_LEGACY)
@@ -78,7 +80,6 @@ foreach(_I msg;nls;quecalls;kbdcalls;sesmgr;som;pmshapi;pmgpi;tcpip32)
         set_target_properties(${_I} PROPERTIES LINK_FLAGS "-m32 -ggdb3")
     endif()
     target_link_libraries(${_I} 2ine)
-    target_link_libraries(${_I} doscalls)
 endforeach()
 
 AUX_SOURCE_DIRECTORY(native/viocalls SRC_VIOCALLS) 
@@ -88,6 +89,7 @@ if(LX_LEGACY)
     set_target_properties(viocalls PROPERTIES LINK_FLAGS "-m32 -ggdb3")
 endif()
 target_link_libraries(viocalls 2ine)
+target_link_libraries(viocalls libncursesw.so)
 
 AUX_SOURCE_DIRECTORY(native/pmwin SRC_PMWIN) 
 add_library(pmwin SHARED ${SRC_PMWIN})
@@ -96,6 +98,8 @@ if(LX_LEGACY)
     set_target_properties(pmwin PROPERTIES LINK_FLAGS "-m32 -ggdb3")
 endif()
 target_link_libraries(pmwin 2ine)
+target_link_libraries(pmwin ${GTK3_LIBRARIES})
+target_link_libraries(pmwin "/usr/lib32/libdwindows.so")
 
 AUX_SOURCE_DIRECTORY(native/doscalls SRC_DOSCALLS) 
 add_library(doscalls SHARED ${SRC_DOSCALLS})
@@ -107,11 +111,9 @@ target_link_libraries(doscalls 2ine)
 target_link_libraries(doscalls "pthread")
 target_link_libraries(doscalls "bsd")
 
-target_link_libraries(viocalls libncursesw.so)
 target_link_libraries(2ine "SDL2")
-target_link_libraries(2ine "SDL2main")
-target_link_libraries(pmwin "SDL2")
-target_link_libraries(pmwin "SDL2main")
+target_link_libraries(2ine "/usr/lib32/libdwindows.so")
+target_link_libraries(2ine ${GTK3_LIBRARIES})
 
 add_executable(lx_dump lx_dump.c)
 

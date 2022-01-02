@@ -26,7 +26,7 @@
 #include <assert.h>
 
 #include "lib2ine.h"
-#include "SDL.h"
+#include "SDL2/SDL.h"
 
 extern char **environ;
 

@@ -7,7 +7,6 @@
  */
 
 #define _GNU_SOURCE 1
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -26,6 +25,7 @@
 #include <sys/syscall.h>
 #include <sys/types.h>
 #include <asm/ldt.h>
+
 
 #include "lib2ine.h"
 
@@ -2739,6 +2739,9 @@ int main(int argc, char **argv, char **envp)
         fprintf(stderr, "Out of memory\n");
         return 1;
     }
+
+    GLoaderState.argc = argc;
+    GLoaderState.argv = argv;
 
     // cleanup some defaults lib2ine set up, since we'll set it up a different way.
     GLoaderState.using_lx_loader = 1;

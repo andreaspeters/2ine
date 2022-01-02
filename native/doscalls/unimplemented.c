@@ -39,10 +39,6 @@ APIRET DosExitCritSec() {
   return 0;
 }
 
-APIRET DosQueryFSAttach(PSZ pszDeviceName, ULONG ulOrdinal, ULONG ulFSAInfoLevel, PFSQBUFFER2 pfsqb, PULONG pcbBuffLength) {
-  TRACE_NATIVE("Unimplemented %s(...)", __FUNCTION__);
-  return ERROR_ACCESS_DENIED;
-} // DosQueryFSAttach
 
 
 

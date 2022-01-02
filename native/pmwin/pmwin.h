@@ -10,14 +10,17 @@
 #define _INCL_PMWIN_H_
 
 #include "../os2types.h"
+#include <dwcompat.h>
+#include <dw.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+
+typedef HWND *PHWND;
 typedef HANDLE HAB, *PHAB;
 typedef HANDLE HMQ, *PHMQ;
-typedef HANDLE HWND, *PHWND;
 
 typedef PVOID MPARAM, *PMPARAM;
 typedef PVOID MRESULT, *PMRESULT;
@@ -893,10 +896,6 @@ OS2EXPORT BOOL OS2API WinPostMsg(HWND hwnd, ULONG msg, MPARAM mp1, MPARAM mp2) O
 OS2EXPORT BOOL OS2API WinPostQueueMsg(HMQ hmq, ULONG msg, MPARAM mp1, MPARAM mp2) OS2APIINFO(902);
 OS2EXPORT HPS OS2API WinBeginPaint(HWND hwnd, HPS hps, PRECTL prclPaint) OS2APIINFO(703);
 OS2EXPORT BOOL OS2API WinEndPaint(HPS hps) OS2APIINFO(738);
-OS2EXPORT BOOL OS2API WinFillRect(HPS hps, PRECTL prcl, LONG lColor) OS2APIINFO(743);
-OS2EXPORT BOOL OS2API WinIsWindow(HAB hab, HWND hwnd) OS2APIINFO(772);
-OS2EXPORT BOOL OS2API WinIsWindowEnabled(HWND hwnd) OS2APIINFO(773);
-OS2EXPORT BOOL OS2API WinIsWindowVisible(HWND hwnd) OS2APIINFO(775);
 
 #ifdef __cplusplus
 }

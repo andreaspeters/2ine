@@ -2994,6 +2994,12 @@ APIRET DosSetProcessCp(ULONG cp)
     return NO_ERROR;
 } // DosSetProcessCp
 
+APIRET DosQueryFSAttach(PSZ pszDeviceName, ULONG ulOrdinal, ULONG ulFSAInfoLevel, PFSQBUFFER2 pfsqb, PULONG pcbBuffLength)
+{
+    TRACE_NATIVE("DosQueryFSAttach('%s', %u, %u, %p, %p)", pszDeviceName, (unsigned int) ulOrdinal, (unsigned int) ulFSAInfoLevel, pfsqb, pcbBuffLength);
+    return ERROR_ACCESS_DENIED;
+} // DosQueryFSAttach
+
 APIRET DosSetFileSize(HFILE h, ULONG len)
 {
     TRACE_NATIVE("DosSetFileSize(%u, %u)", (unsigned int) h, (unsigned int) len);
