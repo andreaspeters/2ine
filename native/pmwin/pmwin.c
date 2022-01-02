@@ -8,7 +8,7 @@
 
 #include "../os2native.h"
 #include "pmwin.h"
-
+#include <SDL2/SDL.h>
 #include "pmwin-lx.h"
 
 // NOTE: PM reference manual says OS/2 generally ignores the HAB you pass
