@@ -24,9 +24,10 @@
 extern SWindows** windows;
 
 MRESULT WinDispatchMsg(HAB hab, PQMSG pqmsg) {
-  TRACE_NATIVE("%s(%u, %p, %u)", __FUNCTION__, (uint) hab, pqmsg, (ULONG) pqmsg->msg);  
+  TRACE_NATIVE("%s(%u, %p, %d)", __FUNCTION__, (uint) hab, pqmsg, pqmsg->msg);  
 
   windows[0]->WindowClass(0, pqmsg->msg,  pqmsg->mp1, pqmsg->mp2);
+
   return 0;
 } // WinDispatchMsg
 

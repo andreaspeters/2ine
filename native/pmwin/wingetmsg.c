@@ -24,7 +24,7 @@
 extern SWindows** windows;
 
 BOOL WinGetMsg(HAB hab, PQMSG pqmsg, HWND hwndFilter, ULONG msgFilterFirst, ULONG msgFilterLast) {
-  TRACE_NATIVE("%s(%d, %s, %u, %u)", __FUNCTION__, hab, pqmsg->msg, msgFilterFirst, msgFilterLast);
+  TRACE_NATIVE("%s(%u, %p, %u, %u, %u)", __FUNCTION__, (uint) hab, pqmsg, (uint) hwndFilter, (uint) msgFilterFirst, (uint) msgFilterLast);  
 
 //  dw_window_show(GLoaderState.mainwindow);
   dw_main_sleep(1000);  

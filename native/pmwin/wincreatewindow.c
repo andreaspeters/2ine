@@ -22,12 +22,16 @@
 #include <sys/stat.h>
 
 unsigned long flStyle = DW_FCF_SYSMENU | DW_FCF_TITLEBAR | DW_FCF_TASKLIST | DW_FCF_DLGBORDER;
+extern SWindows** windows;
 
 HWND WinCreateWindow(HWND hwndParent, PSZ pszClass, PSZ pszName, ULONG flStyle, LONG x, LONG y, LONG cx, LONG cy, HWND hwndOwner, HWND hwndInsertBehind, ULONG id, PVOID pCtlData, PVOID pPresParams) {
   TRACE_NATIVE("%s(%d, %s, %s, %d)", __FUNCTION__, hwndParent, pszClass, pszName, hwndOwner);
   HWND window = dw_window_new(hwndOwner, pszName, flStyle | DW_FCF_SIZEBORDER | DW_FCF_MINMAX);
   
   GLoaderState.mainwindow = window;
+
+  windows[0]->WindowClass(0, WM_CREATE, pCtlData, pPresParams); 
+    
   return window;
 } // WinCreateWindow
 

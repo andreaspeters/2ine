@@ -22,19 +22,20 @@
 #include <sys/stat.h>
 
 
-MRESULT WinDefWindowProc(HWND hwnd, ULONG msg, MPARAM mp1, MPARAM mp2)
-{
-    TRACE_NATIVE("WinDefWindowProc(%u, %u, %p, %p)", (uint) hwnd, (uint) msg, mp1, mp2);
+MRESULT WinDefWindowProc(HWND hwnd, ULONG msg, MPARAM mp1, MPARAM mp2) {
+    TRACE_NATIVE("%s(%u, %u, %p, %p)", __FUNCTION__, (uint) hwnd, msg, mp1, mp2);
 
     switch (msg) {
         // this whole block just returns zero without further processing.
+        case WM_CREATE:
+          TRACE_NATIVE("%s(WM_CREATE)", __FUNCTION__);
+          return (MRESULT) 0;
         case WM_ACTIVATE:
         case WM_APPTERMINATENOTIFY:
         case WM_ADJUSTWINDOWPOS:
         case WM_CALCFRAMERECT:
         case WM_COMMAND:
         case WM_CONTROL:
-        case WM_CREATE:
         case WM_CTLCOLORCHANGE:
         case WM_DESTROY:
         case WM_DRAWITEM:
@@ -85,18 +86,11 @@ MRESULT WinDefWindowProc(HWND hwnd, ULONG msg, MPARAM mp1, MPARAM mp2)
         case WM_VRNDISABLED:
         case WM_VRNENABLED:
         case WM_VSCROLL:
-
         // the SDK reference manual doesn't list default actions for these messages, but it's probably just "return zero".
         case WM_MSGBOXINIT:
         case WM_MSGBOXDISMISS:
-            TRACE_NATIVE("WinDefWindowProc(WM_MSGBOXDISMISS)");
-            return (MRESULT) 0;
-
         // this whole block just returns one without further processing.
         case WM_MENUSELECT:
-            TRACE_NATIVE("WinDefWindowProc(WM_MENUSELECT)");
-            return (MRESULT) 1;
-
         // this block sends the message to the window owner (if one exists), or otherwise returns 0.
         case WM_BEGINDRAG:
         case WM_BEGINSELECT:
@@ -127,7 +121,6 @@ MRESULT WinDefWindowProc(HWND hwnd, ULONG msg, MPARAM mp1, MPARAM mp2)
         case WM_QUERYTRACKINFO:
         case WM_SINGLESELECT:
         case WM_TEXTEDIT:
-            TRACE_NATIVE("WinDefWindowProc(WM_TEXTEDIT)");
         // These messages actually do something specific in default processing...
         case WM_HITTEST:
 
@@ -146,12 +139,10 @@ MRESULT WinDefWindowProc(HWND hwnd, ULONG msg, MPARAM mp1, MPARAM mp2)
         case WM_QUERYWINDOWPARAMS:
         case WM_REALIZEPALETTE:
         case WM_WINDOWPOSCHANGED:
-            TRACE_NATIVE("WinDefWindowProc(WM_WINDOWPOSCHANGED)");
-            break;
-
+          return (MRESULT) 0;
         default:
             TRACE_NATIVE("WinDefWindowProc(DEFAULT)");
-            break;
+            return (MRESULT) 0;
     }
 
     return (MRESULT) 0;
