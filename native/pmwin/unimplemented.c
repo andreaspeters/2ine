@@ -39,12 +39,6 @@ HMQ WinCreateMsgQueue(HAB hab, LONG cmsg)
   return NULL;
 } // WinCreateMsgQueue
 
-MRESULT WinDispatchMsg(HAB hab, PQMSG pqmsg)
-{
-  TRACE_NATIVE("Unimplemented %s(...)", __FUNCTION__);
-    return 0;
-} // WinDispatchMsg
-
 BOOL WinDestroyMsgQueue(HMQ hmq)
 {
   TRACE_NATIVE("Unimplemented %s(...)", __FUNCTION__);
@@ -81,12 +75,12 @@ BOOL WinDestroyWindow(HWND hwnd)
     return TRUE;
 } // WinDestroyWindow
 
-MRESULT WinDefWindowProc(HWND hwnd, ULONG msg, MPARAM mp1, MPARAM mp2)
+
+BOOL WinFillRect(HPS hps, PRECTL prcl, LONG lColor)
 {
   TRACE_NATIVE("Unimplemented %s(...)", __FUNCTION__);
-
-    return (MRESULT) 0;
-} // WinDefWindowProc
+    return NULL;
+} // WinBeginPaint
 
 HPS WinBeginPaint(HWND hwnd, HPS hps, PRECTL prclPaint)
 {

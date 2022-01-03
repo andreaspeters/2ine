@@ -20,4 +20,6 @@
 #define FIRST_HWND_VALUE 10
 #define FIRST_HPS_VALUE 10
 
+SWindows** windows;
+
 // end of pmwin.c ...

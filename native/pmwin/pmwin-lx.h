@@ -15,6 +15,7 @@ LX_NATIVE_MODULE_INIT()
     LX_NATIVE_EXPORT(WinDestroyMsgQueue, 726),
     LX_NATIVE_EXPORT(WinDestroyWindow, 728),
     LX_NATIVE_EXPORT(WinEndPaint, 738),
+    LX_NATIVE_EXPORT(WinFillRect, 743),
     LX_NATIVE_EXPORT(WinGetLastError, 753),
     LX_NATIVE_EXPORT(WinInitialize, 763),
     LX_NATIVE_EXPORT(WinTerminate, 888),

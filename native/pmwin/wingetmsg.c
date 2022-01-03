@@ -21,12 +21,15 @@
 #include <sys/resource.h>
 #include <sys/stat.h>
 
+extern SWindows** windows;
 
 BOOL WinGetMsg(HAB hab, PQMSG pqmsg, HWND hwndFilter, ULONG msgFilterFirst, ULONG msgFilterLast) {
-  TRACE_NATIVE("%s(%d)", __FUNCTION__, hab);
+  TRACE_NATIVE("%s(%d, %s, %u, %u)", __FUNCTION__, hab, pqmsg->msg, msgFilterFirst, msgFilterLast);
 
-  dw_window_show(GLoaderState.mainwindow);
-  dw_main();
+//  dw_window_show(GLoaderState.mainwindow);
+  dw_main_sleep(1000);  
+//  dw_main();
+  return (pqmsg->msg != WM_QUIT) ? TRUE : FALSE;
   return TRUE;
 } // WinGetMsg
 

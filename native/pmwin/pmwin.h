@@ -10,13 +10,11 @@
 #define _INCL_PMWIN_H_
 
 #include "../os2types.h"
-#include <dwcompat.h>
 #include <dw.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 
 typedef HWND *PHWND;
 typedef HANDLE HAB, *PHAB;
@@ -876,6 +874,12 @@ enum {
     CLR_PALEGRAY = 15
 };
 
+typedef struct {
+  PFNWP WindowClass;
+  HAB Hab;
+  struct SWindows *next;
+} SWindows;
+
 
 // API entry points...
 
@@ -896,6 +900,7 @@ OS2EXPORT BOOL OS2API WinPostMsg(HWND hwnd, ULONG msg, MPARAM mp1, MPARAM mp2) O
 OS2EXPORT BOOL OS2API WinPostQueueMsg(HMQ hmq, ULONG msg, MPARAM mp1, MPARAM mp2) OS2APIINFO(902);
 OS2EXPORT HPS OS2API WinBeginPaint(HWND hwnd, HPS hps, PRECTL prclPaint) OS2APIINFO(703);
 OS2EXPORT BOOL OS2API WinEndPaint(HPS hps) OS2APIINFO(738);
+OS2EXPORT BOOL OS2API WinFillRect(HPS hps, PRECTL prcl, LONG lColor) OS2APIINFO(743);
 
 #ifdef __cplusplus
 }

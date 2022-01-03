@@ -23,16 +23,12 @@
 
 extern SWindows** windows;
 
-BOOL WinRegisterClass(HAB hab, PSZ pszClassName, PFNWP pfnWndProc, ULONG flStyle, ULONG cbWindowData) {
-  TRACE_NATIVE("%s(%u, '%s', %p, %u, %u)", __FUNCTION__, (uint) hab, pszClassName, pfnWndProc, (uint) flStyle, (uint) cbWindowData);
+MRESULT WinDispatchMsg(HAB hab, PQMSG pqmsg) {
+  TRACE_NATIVE("%s(%u, %p, %u)", __FUNCTION__, (uint) hab, pqmsg, (ULONG) pqmsg->msg);  
 
-  // TODO: Search hab in array to see if it's exists, if not, add it, of yes, do nothing
-  windows[0]->WindowClass = pfnWndProc;
-  windows[0]->Hab = hab;
+  windows[0]->WindowClass(0, pqmsg->msg,  pqmsg->mp1, pqmsg->mp2);
+  return 0;
+} // WinDispatchMsg
 
-  return TRUE;
-} // WinRegisterClass
-
-// end of pmwin.c ...
 
 

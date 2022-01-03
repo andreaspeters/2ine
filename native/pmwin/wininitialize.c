@@ -21,6 +21,7 @@
 #include <sys/resource.h>
 #include <sys/stat.h>
 
+extern SWindows** windows;
 
 HAB WinInitialize(ULONG flOptions) {
   TRACE_NATIVE("WinInitialize(%u)", (uint) flOptions);
@@ -32,6 +33,8 @@ HAB WinInitialize(ULONG flOptions) {
     dw_feature_set(DW_FEATURE_DARK_MODE, DW_DARK_MODE_FULL);
   /* Initialize the Dynamic Windows engine */
   dw_init(TRUE, 0, NULL);
+
+  windows = malloc(1 * sizeof(*windows));
 } // WinInitialize
 
 
